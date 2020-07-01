@@ -1,0 +1,24 @@
+﻿@page "/timer"
+@inject NavigationManager NavigationManager
+
+
+<h1>Timer</h1>
+
+<EditForm  Model="@timerForm" OnValidSubmit="onFormSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <label>Enter in seconds the time interval into each decrement (0 to 59):</label>&emsp;<InputNumber type="number" id="interval" @bind-Value="timerForm.interval" /><br/>
+
+    <button type="submit">Submit</button>
+</EditForm >
+
+@code {
+    private TimerForm timerForm = new TimerForm();
+
+    private void onFormSubmit()
+    {
+        String where = "decrement/" + timerForm.getInterval();
+        NavigationManager.NavigateTo(where);
+    }
+}

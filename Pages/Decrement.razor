@@ -1,0 +1,41 @@
+﻿@page "/decrement/{Interval:int}"
+
+<h1>Decrement</h1>
+
+<p>Time interval into into each decrement: &emsp; @Interval</p>
+
+<p>Current time: &emsp; @currentTimeH / @currentTimeM / @currentTimeS</p>
+
+<p>Number: &emsp; @numberToDecrement</p>
+
+<button class="btn btn-primary" @onclick="@(async () => await timerLoop())">Start Timer</button>
+
+@code {
+
+    [Parameter]
+    public int Interval { get; set; }
+
+    public int numberToDecrement = 10;
+
+    public int currentTimeH = 0, currentTimeM = 0, currentTimeS = 0;
+
+    async Task timerLoop() {
+        while (numberToDecrement > 0) {
+            await Task.Delay(1000);
+            currentTimeS++;
+            if (currentTimeS >= 60) {
+                currentTimeS = 0;
+                currentTimeM++;
+            }
+            if (currentTimeM >= 60) {
+                currentTimeM = 0;
+                currentTimeH++;
+            }
+            if (currentTimeH >= 24)
+                currentTimeH = 0;
+            if (currentTimeS % Interval == 0)
+                    numberToDecrement--;
+            StateHasChanged();
+        }
+    }
+}
